@@ -1,4 +1,4 @@
-# pwa-learning-app
+# pwa-complete-guide
 
 > Build a Progressive Web App (PWA) that feels like an iOS &amp; Android App, using Device Camera, Push Notifications and more. It is based on the course [Progressive Web Apps (PWA) - The Complete Guide](https://www.udemy.com/course/progressive-web-app-pwa-the-complete-guide/)
 
