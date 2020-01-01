@@ -11,8 +11,5 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  console.log(
-    `[Service Workder] Fetching something ... ${JSON.stringify(event)}`
-  );
   event.respondWith(fetch(event.request));
 });
