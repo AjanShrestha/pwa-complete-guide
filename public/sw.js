@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = 'static-v1';
-const CACHE_DYNAMIC_NAME = 'dynamic-v1';
+const CACHE_STATIC_NAME = 'static-v4';
+const CACHE_DYNAMIC_NAME = 'dynamic-v3';
 
 self.addEventListener('install', event => {
   console.log(
@@ -53,12 +53,12 @@ self.addEventListener('fetch', event => {
         return response;
       } else {
         return fetch(event.request)
-          .then(res => {
+          .then(res =>
             caches.open(CACHE_DYNAMIC_NAME).then(cache => {
               cache.put(event.request.url, res.clone());
               return res;
-            });
-          })
+            })
+          )
           .catch(err => {});
       }
     })
