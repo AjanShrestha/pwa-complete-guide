@@ -1,4 +1,4 @@
-const CACHE_STATIC_NAME = 'static-v4';
+const CACHE_STATIC_NAME = 'static-v6';
 const CACHE_DYNAMIC_NAME = 'dynamic-v3';
 
 self.addEventListener('install', event => {
@@ -47,25 +47,25 @@ self.addEventListener('activate', event => {
   return self.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      if (response) {
-        return response;
-      } else {
-        return fetch(event.request)
-          .then(res =>
-            caches.open(CACHE_DYNAMIC_NAME).then(cache => {
-              cache.put(event.request.url, res.clone());
-              return res;
-            })
-          )
-          .catch(err => {
-            return caches
-              .open(CACHE_STATIC_NAME)
-              .then(cache => cache.match('/offline.html'));
-          });
-      }
-    })
-  );
-});
+// self.addEventListener('fetch', event => {
+//   event.respondWith(
+//     caches.match(event.request).then(response => {
+//       if (response) {
+//         return response;
+//       } else {
+//         return fetch(event.request)
+//           .then(res =>
+//             caches.open(CACHE_DYNAMIC_NAME).then(cache => {
+//               cache.put(event.request.url, res.clone());
+//               return res;
+//             })
+//           )
+//           .catch(err => {
+//             return caches
+//               .open(CACHE_STATIC_NAME)
+//               .then(cache => cache.match('/offline.html'));
+//           });
+//       }
+//     })
+//   );
+// });
