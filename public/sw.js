@@ -3,7 +3,7 @@ self.addEventListener('install', event => {
     `[Service Worker] Installing Service Worker ... ${JSON.stringify(event)}`
   );
   event.waitUntil(
-    caches.open('static').then(cache => {
+    caches.open('static-v2').then(cache => {
       console.log('[Servie Worker] Precaching App Shell');
       cache.addAll([
         '/',
