@@ -126,6 +126,25 @@ if ('indexedDB' in window) {
   });
 }
 
+function sendData() {
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      id: new Date().toISOString(),
+      title: titleInput.value,
+      location: locationInput.value,
+      image:
+        'https://firebasestorage.googleapis.com/v0/b/pwagram-e7d99.appspot.com/o/nep-aus.jpg?alt=media&token=bee0cb9b-af55-4a6c-90aa-105ef88666a0',
+    }),
+  }).then(res => {
+    console.log('Sent data', res);
+  });
+}
+
 form.addEventListener('submit', event => {
   event.preventDefault();
 
@@ -154,5 +173,7 @@ form.addEventListener('submit', event => {
         })
         .catch(console.log);
     });
+  } else {
+    sendData();
   }
 });
