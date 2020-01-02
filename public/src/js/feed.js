@@ -4,6 +4,9 @@ var closeCreatePostModalButton = document.querySelector(
   '#close-create-post-modal-btn'
 );
 var sharedMomentsArea = document.querySelector('#shared-moments');
+var form = document.querySelector('form');
+var titleInput = document.querySelector('#title');
+var locationInput = document.querySelector('#location');
 
 function openCreatePostModal() {
   setTimeout(() => {
@@ -122,3 +125,14 @@ if ('indexedDB' in window) {
     }
   });
 }
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+
+  if (titleInput.value.trim() === '' || locationInput.value.trim() === '') {
+    alert('Please enter valid data!');
+    return;
+  }
+
+  closeCreatePostModal();
+});
