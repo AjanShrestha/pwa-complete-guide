@@ -1,4 +1,7 @@
-const CACHE_STATIC_NAME = 'static-v8';
+importScripts('/src/js/idb.js');
+importScripts('/src/js/utility.js');
+
+const CACHE_STATIC_NAME = 'static-v11';
 const CACHE_DYNAMIC_NAME = 'dynamic-v3';
 const STATIC_FILES = [
   '/',
@@ -8,6 +11,7 @@ const STATIC_FILES = [
   '/src/js/feed.js',
   '/src/js/promise.js',
   '/src/js/fetch.js',
+  '/src/js/idb.js',
   '/src/js/material.min.js',
   '/src/css/app.css',
   '/src/css/feed.css',
@@ -68,17 +72,23 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  const url = 'https://httpbin.org/get';
+  const url = 'https://pwagram-e7d99.firebaseio.com/posts';
 
   if (event.request.url.indexOf(url) > -1) {
     event.respondWith(
-      caches.open(CACHE_DYNAMIC_NAME).then(cache =>
-        fetch(event.request).then(res => {
-          // trimCache(CACHE_DYNAMIC_NAME, 3);
-          cache.put(event.request, res.clone());
-          return res;
-        })
-      )
+      fetch(event.request).then(res => {
+        const clonedRes = res.clone();
+        clearAllData('posts')
+          .then(() => {
+            return clonedRes.json();
+          })
+          .then(data => {
+            for (let key in data) {
+              writeData('posts', data[key]);
+            }
+          });
+        return res;
+      })
     );
   } else if (isInArray(event.request.url, STATIC_FILES)) {
     event.respondWith(caches.match(event.request));
