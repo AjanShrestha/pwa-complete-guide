@@ -48,35 +48,37 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.open(CACHE_DYNAMIC_NAME).then(cache =>
-      fetch(event.request).then(res => {
-        cache.put(event.request, res.clone());
-        return res;
-      })
-    )
-  );
-});
+  const url = 'https://httpbin.org/get';
 
-// self.addEventListener('fetch', event => {
-//   event.respondWith(
-//     caches.match(event.request).then(response => {
-//       if (response) {
-//         return response;
-//       } else {
-//         return fetch(event.request)
-//           .then(res =>
-//             caches.open(CACHE_DYNAMIC_NAME).then(cache => {
-//               cache.put(event.request.url, res.clone());
-//               return res;
-//             })
-//           )
-//           .catch(err => {
-//             return caches
-//               .open(CACHE_STATIC_NAME)
-//               .then(cache => cache.match('/offline.html'));
-//           });
-//       }
-//     })
-//   );
-// });
+  if (event.request.url.indexOf(url) > -1) {
+    event.respondWith(
+      caches.open(CACHE_DYNAMIC_NAME).then(cache =>
+        fetch(event.request).then(res => {
+          cache.put(event.request, res.clone());
+          return res;
+        })
+      )
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        if (response) {
+          return response;
+        } else {
+          return fetch(event.request)
+            .then(res =>
+              caches.open(CACHE_DYNAMIC_NAME).then(cache => {
+                cache.put(event.request.url, res.clone());
+                return res;
+              })
+            )
+            .catch(err => {
+              return caches
+                .open(CACHE_STATIC_NAME)
+                .then(cache => cache.match('/offline.html'));
+            });
+        }
+      })
+    );
+  }
+});
