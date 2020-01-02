@@ -59,13 +59,11 @@ function clearCards() {
 
 function createCard(data) {
   var cardWrapper = document.createElement('div');
-  cardWrapper.className =
-    'shared-moment-card mdl-cardnep-aus.jpg mdl-shadow--2dp';
+  cardWrapper.className = 'shared-moment-card mdl-card mdl-shadow--2dp';
   var cardTitle = document.createElement('div');
   cardTitle.className = 'mdl-card__title';
   cardTitle.style.backgroundImage = `url(${data.image})`;
   cardTitle.style.backgroundSize = 'cover';
-  cardTitle.style.height = '180px';
   cardWrapper.appendChild(cardTitle);
   var cardTitleTextElement = document.createElement('h2');
   cardTitleTextElement.className = 'mdl-card__title-text';
