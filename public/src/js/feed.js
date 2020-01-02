@@ -6,7 +6,9 @@ var closeCreatePostModalButton = document.querySelector(
 var sharedMomentsArea = document.querySelector('#shared-moments');
 
 function openCreatePostModal() {
-  createPostArea.style.display = 'block';
+  setTimeout(() => {
+    createPostArea.style.transform = 'translateY(0)';
+  }, 1);
   if (deferredPrompt) {
     deferredPrompt.prompt();
 
@@ -33,7 +35,7 @@ function openCreatePostModal() {
 }
 
 function closeCreatePostModal() {
-  createPostArea.style.display = 'none';
+  createPostArea.style.transform = 'translateY(100vh)';
 }
 
 shareImageButton.addEventListener('click', openCreatePostModal);
@@ -59,13 +61,11 @@ function clearCards() {
 
 function createCard(data) {
   var cardWrapper = document.createElement('div');
-  cardWrapper.className =
-    'shared-moment-card mdl-cardnep-aus.jpg mdl-shadow--2dp';
+  cardWrapper.className = 'shared-moment-card mdl-card mdl-shadow--2dp';
   var cardTitle = document.createElement('div');
   cardTitle.className = 'mdl-card__title';
   cardTitle.style.backgroundImage = `url(${data.image})`;
   cardTitle.style.backgroundSize = 'cover';
-  cardTitle.style.height = '180px';
   cardWrapper.appendChild(cardTitle);
   var cardTitleTextElement = document.createElement('h2');
   cardTitleTextElement.className = 'mdl-card__title-text';
