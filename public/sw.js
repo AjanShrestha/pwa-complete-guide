@@ -1,7 +1,7 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const CACHE_STATIC_NAME = 'static-v10';
+const CACHE_STATIC_NAME = 'static-v11';
 const CACHE_DYNAMIC_NAME = 'dynamic-v3';
 const STATIC_FILES = [
   '/',
@@ -78,11 +78,15 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       fetch(event.request).then(res => {
         const clonedRes = res.clone();
-        clonedRes.json().then(data => {
-          for (let key in data) {
-            writeData('posts', data[key]);
-          }
-        });
+        clearAllData('posts')
+          .then(() => {
+            return clonedRes.json();
+          })
+          .then(data => {
+            for (let key in data) {
+              writeData('posts', data[key]);
+            }
+          });
         return res;
       })
     );
