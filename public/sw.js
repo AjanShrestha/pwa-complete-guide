@@ -68,7 +68,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  const url = 'https://httpbin.org/get';
+  const url = 'https://pwagram-e7d99.firebaseio.com/posts.json';
 
   if (event.request.url.indexOf(url) > -1) {
     event.respondWith(
