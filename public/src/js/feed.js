@@ -94,7 +94,7 @@ function extractArray(data) {
 }
 
 function updateUI(data) {
-  data.forEach(datum => {
+  extractArray(data).forEach(datum => {
     createCard(datum);
   });
 }
@@ -108,24 +108,17 @@ fetch(url)
   })
   .then(function(data) {
     networkDataReceived = true;
-    console.log(`From web ${data}`);
+    console.log(`From web ${JSON.stringify(data)}`);
     clearCards();
-    updateUI(extractArray(data));
+    updateUI(data);
   });
 
-if ('caches' in window) {
-  caches
-    .match(url)
-    .then(res => {
-      if (res) {
-        return res.json();
-      }
-    })
-    .then(data => {
-      console.log(`From cache ${data}`);
-      if (!networkDataReceived) {
-        clearCards();
-        updateUI(extractArray(data));
-      }
-    });
+if ('indexedDB' in window) {
+  readAllData('posts').then(data => {
+    if (!networkDataReceived) {
+      console.log(`From cache ${JSON.stringify(data)}`);
+      clearCards();
+      updateUI(data);
+    }
+  });
 }
