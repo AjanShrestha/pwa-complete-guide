@@ -17,15 +17,15 @@ const STATIC_FILES = [
   'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css',
 ];
 
-function trimCache(cacheName, maxItems) {
-  caches.open(cacheName).then(cache => {
-    return cache.keys().then(keys => {
-      if (keys.length > maxItems) {
-        cache.delete(keys[0]).then(trimCache(cacheName, maxItems));
-      }
-    });
-  });
-}
+// function trimCache(cacheName, maxItems) {
+//   caches.open(cacheName).then(cache => {
+//     return cache.keys().then(keys => {
+//       if (keys.length > maxItems) {
+//         cache.delete(keys[0]).then(trimCache(cacheName, maxItems));
+//       }
+//     });
+//   });
+// }
 
 function isInArray(string, array) {
   for (let i = 0; i < array.length; i++) {
@@ -74,7 +74,7 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       caches.open(CACHE_DYNAMIC_NAME).then(cache =>
         fetch(event.request).then(res => {
-          trimCache(CACHE_DYNAMIC_NAME, 3);
+          // trimCache(CACHE_DYNAMIC_NAME, 3);
           cache.put(event.request, res.clone());
           return res;
         })
@@ -91,7 +91,7 @@ self.addEventListener('fetch', event => {
           return fetch(event.request)
             .then(res =>
               caches.open(CACHE_DYNAMIC_NAME).then(cache => {
-                trimCache(CACHE_DYNAMIC_NAME, 3);
+                // trimCache(CACHE_DYNAMIC_NAME, 3);
                 cache.put(event.request.url, res.clone());
                 return res;
               })
