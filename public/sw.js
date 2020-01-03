@@ -118,3 +118,41 @@ self.addEventListener('fetch', event => {
     );
   }
 });
+
+self.addEventListener('sync', event => {
+  const url = 'https://pwagram-e7d99.firebaseio.com/posts.json';
+  console.log(`[Service Worker] Background syncing ${JSON.stringify(event)}`);
+  if (event.tag === 'sync-new-posts') {
+    console.log(`[Service Worker] Syncing new Posts`);
+    event.waitUntil(
+      readAllData('sync-posts').then(data => {
+        for (let datum of data) {
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            mode: 'no-cors',
+            body: JSON.stringify({
+              id: datum.id,
+              title: datum.title,
+              location: datum.location,
+              image:
+                'https://firebasestorage.googleapis.com/v0/b/pwagram-e7d99.appspot.com/o/nep-aus.jpg?alt=media&token=bee0cb9b-af55-4a6c-90aa-105ef88666a0',
+            }),
+          })
+            .then(res => {
+              console.log('Sent data', JSON.stringify(res));
+              if (res.ok) {
+                deleteItemFromData('sync-posts', datum.id);
+              }
+            })
+            .catch(err => {
+              console.log('Error while sending data', err);
+            });
+        }
+      })
+    );
+  }
+});
