@@ -56,11 +56,22 @@ function configurePushSub() {
     return;
   }
 
+  let reg;
   navigator.serviceWorker.ready
-    .then(swreg => swreg.pushManager.getSubscription())
+    .then(swreg => {
+      reg = swreg;
+      return swreg.pushManager.getSubscription();
+    })
     .then(sub => {
       if (sub === null) {
         // Create a new subscription
+        const vapidPublicKey =
+          'BPMh9Hdrri8tao7OUshwND1y98BYJmRoxDEcbtZ4MJN3MITRPTo2u7YCRO7PFWbgtqzjpS_uH4vaGIsx1BNEvs8';
+        const convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey);
+        reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertedVapidPublicKey,
+        });
       } else {
         // We have a subscription
       }
