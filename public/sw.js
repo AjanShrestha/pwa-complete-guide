@@ -1,7 +1,7 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const CACHE_STATIC_NAME = 'static-v13';
+const CACHE_STATIC_NAME = 'static-v14';
 const CACHE_DYNAMIC_NAME = 'dynamic-v3';
 const STATIC_FILES = [
   '/',
@@ -112,6 +112,49 @@ self.addEventListener('fetch', event => {
                   return cache.match('/offline.html');
                 }
               });
+            });
+        }
+      })
+    );
+  }
+});
+
+self.addEventListener('sync', event => {
+  const url =
+    'https://us-central1-pwagram-e7d99.cloudfunctions.net/storePostData';
+  console.log(`[Service Worker] Background syncing ${JSON.stringify(event)}`);
+  if (event.tag === 'sync-new-posts') {
+    console.log('[Service Worker] Syncing new Posts');
+    event.waitUntil(
+      readAllData('sync-posts').then(data => {
+        for (let datum of data) {
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              id: datum.id,
+              title: datum.title,
+              location: datum.location,
+              image:
+                'https://firebasestorage.googleapis.com/v0/b/pwagram-e7d99.appspot.com/o/nep-aus.jpg?alt=media&token=bee0cb9b-af55-4a6c-90aa-105ef88666a0',
+            }),
+          })
+            .then(res => {
+              console.log(res);
+              console.log('Sent data', JSON.stringify(res));
+              if (res.ok) {
+                res
+                  .json()
+                  .then(resData =>
+                    deleteItemFromData('sync-posts', resData.id)
+                  );
+              }
+            })
+            .catch(err => {
+              console.log('Error while sending data', err);
             });
         }
       })
