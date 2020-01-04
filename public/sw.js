@@ -175,3 +175,7 @@ self.addEventListener('notificationclick', event => {
   }
   notification.close();
 });
+
+self.addEventListener('notificationclose', event => {
+  console.log(`Notification was close ${JSON.stringify(event)}`);
+});
