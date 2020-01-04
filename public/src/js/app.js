@@ -51,6 +51,22 @@ function displayConfirmNotificaiton() {
   }
 }
 
+function configurePushSub() {
+  if (!('serviceWorker' in navigator)) {
+    return;
+  }
+
+  navigator.serviceWorker.ready
+    .then(swreg => swreg.pushManager.getSubscription())
+    .then(sub => {
+      if (sub === null) {
+        // Create a new subscription
+      } else {
+        // We have a subscription
+      }
+    });
+}
+
 function askForNotificationPermission() {
   Notification.requestPermission(result => {
     console.log(`User Choice ${result}`);
@@ -58,12 +74,13 @@ function askForNotificationPermission() {
       console.log('No notification permission granted!');
     } else {
       // Hide Button
-      displayConfirmNotificaiton();
+      // displayConfirmNotificaiton();
+      configurePushSub();
     }
   });
 }
 
-if ('Notification' in window) {
+if ('Notification' in window && 'serviceWorker' in navigator) {
   enableNotificationsButtons.forEach(button => {
     button.style.display = 'inline-block';
     button.addEventListener('click', askForNotificationPermission);
