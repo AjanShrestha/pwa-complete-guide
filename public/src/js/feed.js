@@ -127,6 +127,7 @@ if ('indexedDB' in window) {
 }
 
 function sendData() {
+  console.log('Inside Send data');
   fetch('https://us-central1-pwagram-e7d99.cloudfunctions.net/storePostData', {
     method: 'POST',
     headers: {

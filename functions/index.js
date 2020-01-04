@@ -5,8 +5,14 @@ const cors = require('cors')({origin: true});
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
+const serviceAccount = require('./pwagram-fb-key.json');
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://pwagram-e7d99.firebaseio.com/',
+});
+
 exports.storePostData = functions.https.onRequest((request, response) => {
-  cors((request, response) => {
+  cors(request, response, () => {
     admin
       .database()
       .ref('posts')

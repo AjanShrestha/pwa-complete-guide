@@ -124,7 +124,7 @@ self.addEventListener('sync', event => {
     'https://us-central1-pwagram-e7d99.cloudfunctions.net/storePostData';
   console.log(`[Service Worker] Background syncing ${JSON.stringify(event)}`);
   if (event.tag === 'sync-new-posts') {
-    console.log(`[Service Worker] Syncing new Posts`);
+    console.log('[Service Worker] Syncing new Posts');
     event.waitUntil(
       readAllData('sync-posts').then(data => {
         for (let datum of data) {
@@ -134,7 +134,6 @@ self.addEventListener('sync', event => {
               'Content-Type': 'application/json',
               Accept: 'application/json',
             },
-            mode: 'no-cors',
             body: JSON.stringify({
               id: datum.id,
               title: datum.title,
@@ -144,6 +143,7 @@ self.addEventListener('sync', event => {
             }),
           })
             .then(res => {
+              console.log(res);
               console.log('Sent data', JSON.stringify(res));
               if (res.ok) {
                 res
