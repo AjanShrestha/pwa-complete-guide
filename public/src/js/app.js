@@ -20,6 +20,13 @@ window.addEventListener('beforeinstallprompt', event => {
   return false;
 });
 
+function displayConfirmNotificaiton() {
+  const options = {
+    body: 'You successfully subscribed to our Notification service!',
+  };
+  new Notification('Successfully subscribed', options);
+}
+
 function askForNotificationPermission() {
   Notification.requestPermission(result => {
     console.log(`User Choice ${result}`);
@@ -27,6 +34,7 @@ function askForNotificationPermission() {
       console.log('No notification permission granted!');
     } else {
       // Hide Button
+      displayConfirmNotificaiton();
     }
   });
 }
