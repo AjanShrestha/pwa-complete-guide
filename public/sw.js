@@ -172,6 +172,18 @@ self.addEventListener('notificationclick', event => {
     console.log('Confirm was chosen');
   } else {
     console.log(action);
+    event.waitUntil(
+      clients.matchAll().then(clis => {
+        let client = clis.find(c => c.visibility === 'visible');
+
+        if (client !== undefined) {
+          client.navigate('http://localhost:8080');
+          client.focus();
+        } else {
+          clients.openWindow('http://localhost:8080');
+        }
+      })
+    );
   }
   notification.close();
 });
