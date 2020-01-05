@@ -1,7 +1,7 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const CACHE_STATIC_NAME = 'static-v14';
+const CACHE_STATIC_NAME = 'static-v15';
 const CACHE_DYNAMIC_NAME = 'dynamic-v3';
 const STATIC_FILES = [
   '/',
@@ -160,4 +160,54 @@ self.addEventListener('sync', event => {
       })
     );
   }
+});
+
+self.addEventListener('notificationclick', event => {
+  const notification = event.notification;
+  const action = event.action;
+
+  console.log(notification);
+
+  if (action === 'confirm') {
+    console.log('Confirm was chosen');
+  } else {
+    console.log(action);
+    event.waitUntil(
+      clients.matchAll().then(clis => {
+        let client = clis.find(c => c.visibility === 'visible');
+
+        if (client !== undefined) {
+          client.navigate(notification.data.url);
+          client.focus();
+        } else {
+          clients.openWindow(notification.data.url);
+        }
+      })
+    );
+  }
+  notification.close();
+});
+
+self.addEventListener('notificationclose', event => {
+  console.log(`Notification was close ${JSON.stringify(event)}`);
+});
+
+self.addEventListener('push', event => {
+  console.log(`Push Notification received ${JSON.stringify(event)}`);
+
+  let data = {title: 'New!', content: 'Fallback', openUrl: '/'};
+  if (event.data) {
+    data = JSON.parse(event.data.text());
+  }
+
+  const options = {
+    body: data.content,
+    icon: '/src/images/icons/app-icon-96x96.png',
+    badge: '/src/images/icons/app-icon-96x96.png',
+    data: {
+      url: data.openUrl,
+    },
+  };
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
