@@ -179,3 +179,20 @@ self.addEventListener('notificationclick', event => {
 self.addEventListener('notificationclose', event => {
   console.log(`Notification was close ${JSON.stringify(event)}`);
 });
+
+self.addEventListener('push', event => {
+  console.log(`Push Notification received ${JSON.stringify(event)}`);
+
+  let data = {title: 'New!', content: 'Fallback'};
+  if (event.data) {
+    data = JSON.parse(event.data.text());
+  }
+
+  const options = {
+    body: data.content,
+    icon: '/src/images/icons/app-icon-96x96.png',
+    badge: '/src/images/icons/app-icon-96x96.png',
+  };
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
+});
