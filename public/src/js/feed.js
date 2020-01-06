@@ -13,7 +13,26 @@ var captureButton = document.querySelector('#capture-btn');
 var imagePicker = document.querySelector('#image-picker');
 var imagePickerArea = document.querySelector('#pick-image');
 
-function initializeMedia() {}
+function initializeMedia() {
+  if (!('mediaDevices' in navigator)) {
+    navigator.mediaDevices = {};
+  }
+
+  if (!('getUserMedia' in navigator.mediaDevices)) {
+    navigator.mediaDevices.getUserMedia = constrains => {
+      var getUserMedia =
+        navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+      if (!getUserMedia) {
+        return Promise.reject(new Error('getUserMedia is not implemented'));
+      }
+
+      return new Promise((resolve, reject) => {
+        getUserMedia.call(navigator, constrains, resolve, reject);
+      });
+    };
+  }
+}
 
 function openCreatePostModal() {
   setTimeout(() => {
