@@ -19,6 +19,7 @@
     "firebase-admin": "8.9.0",
     "firebase-functions": "^3.3.0",
     "formidable": "1.2.1",
+    "formidable-serverless": "1.0.3",
     "uuid-v4": "0.1.0",
     "web-push": "3.4.3"
   },
