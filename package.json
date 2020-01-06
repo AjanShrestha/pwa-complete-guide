@@ -4,7 +4,11 @@
   "description": "A complete guide to PWAs. Building a simple Instagram clone.",
   "main": "index.js",
   "scripts": {
-    "start": "http-server -c-1"
+    "start": "http-server -c-1",
+    "setup-sw": "workbox wizard",
+    "minify": "uglifyjs public/src/js/app.js -o public/src/js/app.min.js --compress --mangle && uglifyjs public/src/js/feed.js -o public/src/js/feed.min.js --compress --mangle && uglifyjs public/src/js/fetch.js -o public/src/js/fetch.min.js --compress --mangle && uglifyjs public/src/js/idb.js -o public/src/js/idb.min.js --compress --mangle && uglifyjs public/src/js/promise.js -o public/src/js/promise.min.js --compress --mangle && uglifyjs public/src/js/utility.js -o public/src/js/utility.min.js --compress --mangle",
+    "generate-sw": "workbox injectManifest",
+    "build": "yarn run minify && yarn run generate-sw"
   },
   "keywords": [
     "pwa",
@@ -17,6 +21,10 @@
   "author": "Ajan Lal Shrestha",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^0.12.0"
+    "http-server": "^0.12.0",
+    "workbox-cli": "4.3.1"
+  },
+  "dependencies": {
+    "uglify-es": "3.3.9"
   }
 }
