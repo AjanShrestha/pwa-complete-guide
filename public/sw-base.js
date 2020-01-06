@@ -45,6 +45,32 @@ https: workbox.routing.registerRoute(
   }
 );
 
+https: workbox.routing.registerRoute(
+  ({event}) => event.request.headers.get('accept').includes('text/html'),
+  ({url, event}) => {
+    return caches.match(event.request).then(function(response) {
+      if (response) {
+        return response;
+      } else {
+        return fetch(event.request)
+          .then(function(res) {
+            return caches.open('dynamic').then(function(cache) {
+              cache.put(event.request.url, res.clone());
+              return res;
+            });
+          })
+          .catch(function(err) {
+            return caches
+              .match(workbox.precaching.getCacheKeyForURL('/offline.html'))
+              .then(res => {
+                return res;
+              });
+          });
+      }
+    });
+  }
+);
+
 workbox.routing.registerRoute(
   'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css',
   // cache then network
