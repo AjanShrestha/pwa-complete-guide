@@ -5,7 +5,7 @@ module.exports = {
     'src/images/*.{jpg,png}',
     'src/js/*.min.js',
   ],
-  globIgnores: ['../workbox-config.js', 'help/**'],
+  globIgnores: ['../workbox-config.js', 'help/**', '404.html'],
   swSrc: 'public/sw-base.js',
   swDest: 'public/service-worker.js',
 };
