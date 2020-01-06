@@ -2,7 +2,7 @@
   z-index: 1001;
   position: fixed;
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh-56px);
   overflow-y: scroll;
   bottom: 0;
   top: 56px;
@@ -10,6 +10,27 @@
   text-align: center;
   transform: translateY(100vh);
   transition: transform 0.3s;
+}
+
+#create-post video,
+#create-post canvas {
+  width: 512px;
+  max-width: 100%;
+  display: none;
+  margin: auto;
+}
+
+#create-post #pick-image,
+#create-post #location-loader {
+  display: none;
+}
+
+#create-post #capture-btn {
+  margin: 10px auto;
+}
+
+.mdl-spinner {
+  margin: auto;
 }
 
 .main-image {

@@ -1,13 +1,14 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const CACHE_STATIC_NAME = 'static-v15';
-const CACHE_DYNAMIC_NAME = 'dynamic-v3';
+const CACHE_STATIC_NAME = 'static-v26';
+const CACHE_DYNAMIC_NAME = 'dynamic-v4';
 const STATIC_FILES = [
   '/',
   '/index.html',
   '/offline.html',
   '/src/js/app.js',
+  '/src/js/utility.js',
   '/src/js/feed.js',
   '/src/js/promise.js',
   '/src/js/fetch.js',
@@ -128,19 +129,16 @@ self.addEventListener('sync', event => {
     event.waitUntil(
       readAllData('sync-posts').then(data => {
         for (let datum of data) {
+          let postData = new FormData();
+          postData.append('id', datum.id);
+          postData.append('title', datum.title);
+          postData.append('location', datum.location);
+          postData.append('rawLocationLat', datum.rawLocation.lat);
+          postData.append('rawLocationLng', datum.rawLocation.lng);
+          postData.append('file', datum.picture, datum.id + '.png');
           fetch(url, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
-            body: JSON.stringify({
-              id: datum.id,
-              title: datum.title,
-              location: datum.location,
-              image:
-                'https://firebasestorage.googleapis.com/v0/b/pwagram-e7d99.appspot.com/o/nep-aus.jpg?alt=media&token=bee0cb9b-af55-4a6c-90aa-105ef88666a0',
-            }),
+            body: postData,
           })
             .then(res => {
               console.log(res);
