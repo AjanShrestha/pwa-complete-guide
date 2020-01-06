@@ -2,6 +2,14 @@ importScripts(
   'https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js'
 );
 
+workbox.routing.registerRoute(
+  /.*(?:googleapis|gstatic)\.com.*$/,
+  // cache then network
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: 'google-fonts',
+  })
+);
+
 workbox.precaching.precacheAndRoute([
   {
     "url": "404.html",
@@ -65,7 +73,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "sw-base.js",
-    "revision": "46a4d5bb2ee3ae2cd23992b8e1973304"
+    "revision": "9d92de6522bd058ac21991f0f7b397a9"
   },
   {
     "url": "sw.js",
