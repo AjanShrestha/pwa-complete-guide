@@ -12,6 +12,7 @@ var canvasElement = document.querySelector('#canvas');
 var captureButton = document.querySelector('#capture-btn');
 var imagePicker = document.querySelector('#image-picker');
 var imagePickerArea = document.querySelector('#pick-image');
+let picture;
 
 function initializeMedia() {
   if (!('mediaDevices' in navigator)) {
@@ -57,6 +58,7 @@ captureButton.addEventListener('click', event => {
     videoPlayer.videoHeight / (videoPlayer.videoWidth / canvas.width)
   );
   videoPlayer.srcObject.getVideoTracks().forEach(track => track.stop());
+  picture = dataURItoBlob(canvasElement.toDataURL());
 });
 
 function openCreatePostModal() {
@@ -183,19 +185,15 @@ if ('indexedDB' in window) {
 
 function sendData() {
   console.log('Inside Send data');
+  const id = new Date().toISOString();
+  let postData = new FormData();
+  postData.append('id', id);
+  postData.append('title', titleInput.value);
+  postData.append('location', locationInput.value);
+  postData.append('file', picture, id + '.png');
   fetch('https://us-central1-pwagram-e7d99.cloudfunctions.net/storePostData', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      id: new Date().toISOString(),
-      title: titleInput.value,
-      location: locationInput.value,
-      image:
-        'https://firebasestorage.googleapis.com/v0/b/pwagram-e7d99.appspot.com/o/nep-aus.jpg?alt=media&token=bee0cb9b-af55-4a6c-90aa-105ef88666a0',
-    }),
+    body: postData,
   }).then(res => {
     console.log('Sent data', res);
   });
@@ -217,6 +215,7 @@ form.addEventListener('submit', event => {
         id: new Date().toISOString(),
         title: titleInput.value,
         location: locationInput.value,
+        picture: picture,
       };
       writeData('sync-posts', post)
         .then(() => sw.sync.register('sync-new-posts'))
