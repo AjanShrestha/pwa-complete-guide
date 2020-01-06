@@ -1,7 +1,7 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const CACHE_STATIC_NAME = 'static-v22';
+const CACHE_STATIC_NAME = 'static-v23';
 const CACHE_DYNAMIC_NAME = 'dynamic-v4';
 const STATIC_FILES = [
   '/',
@@ -133,6 +133,8 @@ self.addEventListener('sync', event => {
           postData.append('id', datum.id);
           postData.append('title', datum.title);
           postData.append('location', datum.location);
+          postData.append('rawLocationLat', datum.rawLocation.lat);
+          postData.append('rawLocationLng', datum.rawLocation.lng);
           postData.append('file', datum.picture, datum.id + '.png');
           fetch(url, {
             method: 'POST',

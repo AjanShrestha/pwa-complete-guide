@@ -47,6 +47,10 @@ exports.storePostData = functions.https.onRequest((request, response) => {
                   id: fields.id,
                   title: fields.title,
                   location: fields.location,
+                  rawLocation: {
+                    lat: fields.rawLocationLat,
+                    lng: fields.rawLocationLng,
+                  },
                   image: `https://firebasestorage.googleapis.com/v0/b/${
                     bucket.name
                   }/o/${encodeURIComponent(file.name)}?alt=media&token=${uuid}`,
