@@ -1,6 +1,8 @@
 importScripts(
   'https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js'
 );
+importScripts('/src/js/idb.js');
+importScripts('/src/js/utility.js');
 
 workbox.routing.registerRoute(
   /.*(?:firebasestorage\.googleapis)\.com.*$/,
@@ -22,6 +24,25 @@ workbox.routing.registerRoute(
       }),
     ],
   })
+);
+
+https: workbox.routing.registerRoute(
+  'https://pwagram-e7d99.firebaseio.com/posts.json',
+  ({url, event}) => {
+    return fetch(event.request).then(res => {
+      const clonedRes = res.clone();
+      clearAllData('posts')
+        .then(() => {
+          return clonedRes.json();
+        })
+        .then(data => {
+          for (let key in data) {
+            writeData('posts', data[key]);
+          }
+        });
+      return res;
+    });
+  }
 );
 
 workbox.routing.registerRoute(
@@ -95,7 +116,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "sw-base.js",
-    "revision": "bfb572af24d68574f1bdb476e705f501"
+    "revision": "7569606da52763f88c4cd30bd6c6aace"
   },
   {
     "url": "sw.js",
