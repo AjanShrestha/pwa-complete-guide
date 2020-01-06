@@ -15,6 +15,12 @@ workbox.routing.registerRoute(
   // cache then network
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'google-fonts',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 3,
+        maxAgeSeconds: 60 * 60 * 24 * 30,
+      }),
+    ],
   })
 );
 
