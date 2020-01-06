@@ -2,12 +2,13 @@ importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
 const CACHE_STATIC_NAME = 'static-v21';
-const CACHE_DYNAMIC_NAME = 'dynamic-v3';
+const CACHE_DYNAMIC_NAME = 'dynamic-v4';
 const STATIC_FILES = [
   '/',
   '/index.html',
   '/offline.html',
   '/src/js/app.js',
+  '/src/js/utility.js',
   '/src/js/feed.js',
   '/src/js/promise.js',
   '/src/js/fetch.js',
