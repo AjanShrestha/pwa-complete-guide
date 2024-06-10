@@ -16,7 +16,7 @@
   "dependencies": {
     "@google-cloud/storage": "4.2.0",
     "cors": "2.8.5",
-    "firebase-admin": "11.4.1",
+    "firebase-admin": "12.1.1",
     "firebase-functions": "^3.24.1",
     "formidable": "1.2.1",
     "formidable-serverless": "1.0.3",
